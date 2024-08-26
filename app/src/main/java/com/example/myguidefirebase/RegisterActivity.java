@@ -102,6 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
         userData.put("userId", uid); // Store userId in Firestore
         userData.put("email", email);
         userData.put("role", "user"); // Assign default role
+        userData.put("location", new HashMap<String, String>()); // Initialize location as a map to prevent null errors
 
         FirebaseFirestore.getInstance().collection("users")
                 .document(uid)
@@ -118,6 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Failed to save user role.", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private boolean isPasswordValid(String password) {
         return password.length() >= 8 &&

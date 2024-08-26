@@ -5,13 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -21,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mukesh.countrypicker.CountryPicker;
@@ -41,16 +38,20 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
     private RadioGroup radioGroupGuideType;
     private RadioButton radioCertifiedGuide, radioUncertifiedGuide;
     private CheckBox checkBoxLocal, checkBoxOver21;
-    private Spinner spinnerCriminalRecord;
     private EditText editTextUserRequest;
 
     private String selectedCountry;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enlist_as_guide);
 
+        // Initialize Firestore
+        db = FirebaseFirestore.getInstance();
+
+        // Initialize UI components
         buttonSelectCountry = findViewById(R.id.buttonSelectCountry);
         buttonSaveGuideProfile = findViewById(R.id.buttonSaveGuideProfile);
         buttonSelectCertification = findViewById(R.id.buttonSelectCertification);
@@ -60,7 +61,6 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
         radioUncertifiedGuide = findViewById(R.id.radioUncertifiedGuide);
         checkBoxLocal = findViewById(R.id.checkBoxLocal);
         checkBoxOver21 = findViewById(R.id.checkBoxOver21);
-        spinnerCriminalRecord = findViewById(R.id.spinnerCriminalRecord);
         editTextUserRequest = findViewById(R.id.editTextUserRequest);
 
         buttonSelectCountry.setOnClickListener(v -> showCountryPicker());
@@ -77,11 +77,6 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
                 showConfirmationDialog();
             }
         });
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.conviction_options, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCriminalRecord.setAdapter(adapter);
     }
 
     private boolean validateInputs() {
@@ -171,33 +166,24 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
             return;
         }
 
-        Certification certification = new Certification(
-                user.getUid(),
-                user.getDisplayName(),
-                user.getEmail(),
-                radioCertifiedGuide.isChecked()
-        );
+        String userId = user.getUid();
+        String userName = user.getDisplayName(); // Get from FirebaseUser or set from another source
+        String userEmail = user.getEmail();
+        boolean isCertified = radioCertifiedGuide.isChecked();
 
+        Certification certification = new Certification(userId, userName, userEmail, isCertified);
         certification.setUserRequest(editTextUserRequest.getText().toString());
-        certification.setStatus("pending"); // Status is always pending when initially saving
 
-        // Additional fields like country can be set as admin comments or other fields as needed
         if (selectedCountry != null && !selectedCountry.isEmpty()) {
-            certification.setAdminComments("Country: " + selectedCountry); // Optional for later admin review
+            Map<String, String> location = new HashMap<>();
+            location.put("country", selectedCountry);
+            certification.setLocation(location);
         }
 
-        if (radioCertifiedGuide.isChecked()) {
-            if (certificationUri != null) {
-                uploadCertificationAndSaveProfile(certification);
-            } else {
-                Toast.makeText(this, "Please upload your certification document.", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            if (idPhotoUri != null) {
-                uploadIdPhotoAndSaveProfile(certification);
-            } else {
-                Toast.makeText(this, "Please upload your ID photo.", Toast.LENGTH_SHORT).show();
-            }
+        if (isCertified && certificationUri != null) {
+            uploadCertificationAndSaveProfile(certification);
+        } else if (!isCertified && idPhotoUri != null) {
+            uploadIdPhotoAndSaveProfile(certification);
         }
     }
 
@@ -208,17 +194,13 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d("EnlistAsGuideActivity", "Certification URI: " + certificationUri.toString());
-
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference certificationRef = storageRef.child("certifications/" + certification.getUserId() + ".pdf");
 
         certificationRef.putFile(certificationUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    Log.d("EnlistAsGuideActivity", "Certification uploaded successfully.");
                     certificationRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         certification.setCertificationUrl(uri.toString());
-                        Log.d("EnlistAsGuideActivity", "Certification URL: " + uri.toString());
                         uploadIdPhotoAndSaveProfile(certification);
                     }).addOnFailureListener(e -> {
                         Log.e("EnlistAsGuideActivity", "Failed to get download URL for certification: " + e.getMessage());
@@ -238,17 +220,14 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d("EnlistAsGuideActivity", "ID Photo URI: " + idPhotoUri.toString());
-
         StorageReference storageRef = FirebaseStorage.getInstance().getReference();
         StorageReference idPhotoRef = storageRef.child("id_photos/" + certification.getUserId() + ".jpg");
 
         idPhotoRef.putFile(idPhotoUri)
                 .addOnSuccessListener(taskSnapshot -> {
-                    Log.d("EnlistAsGuideActivity", "ID Photo uploaded successfully.");
                     idPhotoRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         certification.setIdPhotoUrl(uri.toString());
-                        saveGuideProfileToFirebase(certification);
+                        saveCertificationToFirebase(certification);
                     });
                 })
                 .addOnFailureListener(e -> {
@@ -257,22 +236,21 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
                 });
     }
 
-    private void saveGuideProfileToFirebase(Certification certification) {
-        FirebaseFirestore.getInstance().collection("certifications")
-                .document(certification.getCertificationId()) // Use certificationId as the document ID
-                .set(certification, SetOptions.merge())
+    private void saveCertificationToFirebase(Certification certification) {
+        db.collection("certifications")
+                .document(certification.getCertificationId())
+                .set(certification)
                 .addOnSuccessListener(aVoid -> {
-                    Log.d("EnlistAsGuideActivity", "Guide profile submitted for approval.");
-                    Toast.makeText(EnlistAsGuideActivity.this, "Guide profile submitted for approval.", Toast.LENGTH_SHORT).show();
+                    Log.d("EnlistAsGuideActivity", "Guide certification submitted for approval.");
+                    Toast.makeText(EnlistAsGuideActivity.this, "Guide certification submitted for approval.", Toast.LENGTH_SHORT).show();
 
-                    // Redirect to ProfileActivity
                     Intent intent = new Intent(EnlistAsGuideActivity.this, ProfileActivity.class);
                     startActivity(intent);
                     finish();
                 })
                 .addOnFailureListener(e -> {
-                    Log.e("EnlistAsGuideActivity", "Failed to submit guide profile.", e);
-                    Toast.makeText(EnlistAsGuideActivity.this, "Failed to submit guide profile.", Toast.LENGTH_SHORT).show();
+                    Log.e("EnlistAsGuideActivity", "Failed to submit guide certification.", e);
+                    Toast.makeText(EnlistAsGuideActivity.this, "Failed to submit guide certification.", Toast.LENGTH_SHORT).show();
                 });
     }
 

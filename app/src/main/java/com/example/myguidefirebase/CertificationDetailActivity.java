@@ -31,7 +31,7 @@ public class CertificationDetailActivity extends AppCompatActivity {
         textViewUserRequest = findViewById(R.id.textViewUserRequest);
         imageViewIdPhoto = findViewById(R.id.imageViewIdPhoto);
         webViewCertification = findViewById(R.id.webViewCertification);
-        editTextAdminComments = findViewById(R.id.editTextAdminComments); // Admin comments input
+        editTextAdminComments = findViewById(R.id.editTextAdminComments);
 
         Button buttonApprove = findViewById(R.id.buttonApprove);
         Button buttonDeny = findViewById(R.id.buttonDeny);
@@ -66,10 +66,8 @@ public class CertificationDetailActivity extends AppCompatActivity {
                                     .load(certification.getIdPhotoUrl())
                                     .into(imageViewIdPhoto);
 
-                            // Display the certification PDF in a WebView
                             webViewCertification.loadUrl(certification.getCertificationUrl());
 
-                            // Optionally load any existing admin comments if they exist
                             if (certification.getAdminComments() != null) {
                                 editTextAdminComments.setText(certification.getAdminComments());
                             }
@@ -84,7 +82,7 @@ public class CertificationDetailActivity extends AppCompatActivity {
     }
 
     private void updateCertificationStatus(String status) {
-        String adminComments = editTextAdminComments.getText().toString(); // Get admin comments
+        String adminComments = editTextAdminComments.getText().toString();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -98,26 +96,26 @@ public class CertificationDetailActivity extends AppCompatActivity {
                         if (certification != null) {
                             db.collection("certifications")
                                     .document(certificationId)
-                                    .update("status", status, "adminComments", adminComments)
+                                    .update("certificationStatus", status, "adminComments", adminComments) // Use "certificationStatus"
                                     .addOnSuccessListener(aVoid -> {
                                         Toast.makeText(this, "Certification " + status, Toast.LENGTH_SHORT).show();
 
-                                        // Determine the new role based on certification status and type
                                         String userId = certification.getUserId();
                                         String newRole;
+
                                         if (status.equals("approved")) {
+                                            // Determine the role based on whether the guide is certified or not
                                             newRole = certification.isCertified() ? "certified_guide" : "uncertified_guide";
                                         } else {
-                                            newRole = "user";  // Reset role to user if not approved
+                                            newRole = "user";  // Keep as user if not approved
                                         }
 
-                                        // Update the user's role in Firestore
                                         if (userId != null) {
                                             db.collection("users").document(userId)
                                                     .update("role", newRole)
                                                     .addOnSuccessListener(unused -> {
                                                         Toast.makeText(CertificationDetailActivity.this, "User role updated to " + newRole, Toast.LENGTH_SHORT).show();
-                                                        finish();  // Close the activity after updating
+                                                        finish();
                                                     })
                                                     .addOnFailureListener(e -> Toast.makeText(CertificationDetailActivity.this, "Failed to update user role: " + e.getMessage(), Toast.LENGTH_SHORT).show());
                                         } else {
@@ -136,8 +134,5 @@ public class CertificationDetailActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to retrieve certification: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
-
-
 
 }

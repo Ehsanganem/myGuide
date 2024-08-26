@@ -1,6 +1,7 @@
 package com.example.myguidefirebase;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Map;
 
 public class Certification {
 
@@ -14,6 +15,7 @@ public class Certification {
     private String status; // e.g., "pending", "approved", "rejected"
     private String adminComments;
     private boolean isCertified;
+    private Map<String, String> location;  // New location field
 
     public Certification() {
         // Default constructor
@@ -107,5 +109,14 @@ public class Certification {
 
     public void setCertified(boolean certified) {
         isCertified = certified;
+    }
+
+    // New getter and setter for location
+    public Map<String, String> getLocation() {
+        return location;
+    }
+
+    public void setLocation(Map<String, String> location) {
+        this.location = location;
     }
 }

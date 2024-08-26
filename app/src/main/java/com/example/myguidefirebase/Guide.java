@@ -12,6 +12,8 @@ public class Guide {
     private String bio;
     private String certificationStatus;
     private String certificationUrl;
+    private String idPhotoUrl;  // Add this field
+    private boolean isCertified;  // Add this field
     private Map<String, Object> location; // Location is a Map with fields like country and city
     private String pricePerDay;
     private List<String> services;
@@ -75,6 +77,22 @@ public class Guide {
 
     public void setCertificationUrl(String certificationUrl) {
         this.certificationUrl = certificationUrl;
+    }
+
+    public String getIdPhotoUrl() {  // Add this getter
+        return idPhotoUrl;
+    }
+
+    public void setIdPhotoUrl(String idPhotoUrl) {  // Add this setter
+        this.idPhotoUrl = idPhotoUrl;
+    }
+
+    public boolean isCertified() {  // Add this getter
+        return isCertified;
+    }
+
+    public void setCertified(boolean isCertified) {  // Add this setter
+        this.isCertified = isCertified;
     }
 
     public Map<String, Object> getLocation() {

@@ -14,7 +14,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserProfileSetupActivity extends AppCompatActivity {
@@ -84,15 +86,20 @@ public class UserProfileSetupActivity extends AppCompatActivity {
         String userId = auth.getCurrentUser().getUid();
         String name = editTextName.getText().toString();
         String phoneNumber = editTextPhone.getText().toString();
-        String languages = editTextLanguages.getText().toString();
-        String location = editTextLocation.getText().toString();
+        List<String> languages = Arrays.asList(editTextLanguages.getText().toString().split(",\\s*"));
+        String locationString = editTextLocation.getText().toString();
+
+        // Assuming location is stored as a map with country and city.
+        Map<String, String> location = new HashMap<>();
+        location.put("country", locationString);  // You may split this into country/city if required.
 
         Map<String, Object> userProfile = new HashMap<>();
         userProfile.put("name", name);
         userProfile.put("phoneNumber", phoneNumber);
-        userProfile.put("languages", languages);
-        userProfile.put("location", location);
-        userProfile.put("isProfileComplete", true);  // Add the profile completion flag
+        userProfile.put("languages", languages);  // Store as a List<String>
+        userProfile.put("location", location);  // Store as a Map<String, String>
+        userProfile.put("role", "user");  // Default role as user
+        userProfile.put("isProfileComplete", true);  // Profile is now complete
 
         FirebaseFirestore.getInstance().collection("users").document(userId)
                 .set(userProfile, SetOptions.merge())  // Use merge to avoid overwriting other fields
@@ -107,5 +114,4 @@ public class UserProfileSetupActivity extends AppCompatActivity {
                     Toast.makeText(UserProfileSetupActivity.this, "Failed to save profile", Toast.LENGTH_SHORT).show();
                 });
     }
-
 }
