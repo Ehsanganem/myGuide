@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Profile</string>
+    <string name="amit_kumar">Amit Kumar</string>
+    <string name="username">amitthecoder</string>
+    <string name="bio">As an Android app developer, I have a passion for creating beautiful and functional apps for users. I write code primarily in Kotlin, which is a popular programming language for Android development. My focus is on creating a visually appealing and intuitive user experience that makes using the app a pleasure.</string>
+    <string name="profile">Profile</string>
+    <string name="about">About</string>
+    <string name="user_information">User Information</string>
+    <string name="username_">Username</string>
+    <string name="amitthecoder">amitthecoder</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="age">Age</string>
+    <string name="_21">21</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="_07_02_2003">07/02/2003</string>
+    <string name="mobile">Mobile</string>
+    <string name="_91_9000000009">+91 9000000009</string>
+    <string name="email">Email</string>
+    <string name="axxxxxxa_gmail_com">axxxxxxa@gmail.com</string>
+    <string name="social_media">Social Media</string>
+    <string name="select_language_prompt">Select Language</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="resend_verification_code">Resend Verification Code</string>
+    <string name="phone">phone\n</string>
+    <string name="logout">Logout</string>
+    <string name="home">Home</string>
+    <string name="enlist_as_certified_guide">Enlist as Certified Guide</string>
+    <string name="notifications">notifactions\n</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="resend_verification_email">Resend Verification Email</string>
+    <string name="check_verification">Check Verification</string>
+    <string name="criminal_record_prompt">Have you been convicted of a crime?</string>
+    <string name="enlist_as_guide">enlist_as_guide</string>
+    <string name="enter_your_request_to_be_an_uncertified_guide">Enter your request to be an uncertified guide</string>
+    <string name="id_photo">ID Photo</string>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Hebrew</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Arabic</item>
+        <item>Hindu</item>
+        <item>Russian</item>
+        <item>Hungarian</item>
+        <item>Nigrean</item>
+        <item>Ukranian</item>
+        <item>Japense</item>
+        <item>Korean</item>
+        <item>Portuguese</item>
+        <!-- Add more languages as needed -->
+    </string-array>
+
+    <string-array name="conviction_options">
+    <item>Yes</item>
+    <item>No</item>
+    </string-array>
+</resources>

@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Location" />
+
+    <Spinner
+        android:id="@+id/spinnerLanguages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextLocation"
+        android:layout_marginTop="16dp" />
+
+    <Spinner
+        android:id="@+id/spinnerServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerLanguages"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinnerServices"
+        android:layout_marginTop="16dp"
+        android:text="Search" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGuides"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/buttonSearch"
+        android:layout_marginTop="16dp" />
+
+</RelativeLayout>
