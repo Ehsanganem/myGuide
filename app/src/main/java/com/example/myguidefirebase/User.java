@@ -1,9 +1,10 @@
 package com.example.myguidefirebase;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class User {
+public class User implements Serializable {
     private String userId;
     private String name;
     private String email;

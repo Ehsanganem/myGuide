@@ -1,41 +1,65 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editTextLocation"
+    <!-- Country Selection -->
+    <Button
+        android:id="@+id/buttonSelectCountry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Location" />
+        android:text="Select Country" />
 
-    <Spinner
-        android:id="@+id/spinnerLanguages"
+    <TextView
+        android:id="@+id/textViewSelectedCountry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/editTextLocation"
+        android:text="Selected Country"
+        android:layout_marginTop="8dp" />
+
+    <!-- Language Selection -->
+    <Button
+        android:id="@+id/buttonSelectLanguages"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Languages"
         android:layout_marginTop="16dp" />
 
-    <Spinner
-        android:id="@+id/spinnerServices"
+    <TextView
+        android:id="@+id/textViewSelectedLanguages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinnerLanguages"
+        android:text="Selected Languages"
+        android:layout_marginTop="8dp" />
+
+    <!-- Services Selection -->
+    <Button
+        android:id="@+id/buttonSelectServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Services"
         android:layout_marginTop="16dp" />
 
+    <TextView
+        android:id="@+id/textViewSelectedServices"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Selected Services"
+        android:layout_marginTop="8dp" />
+
+    <!-- Search Button -->
     <Button
         android:id="@+id/buttonSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinnerServices"
-        android:layout_marginTop="16dp"
-        android:text="Search" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewGuides"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/buttonSearch"
+        android:text="Search Guides"
         android:layout_marginTop="16dp" />
 
-</RelativeLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSearchResults"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

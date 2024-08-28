@@ -97,13 +97,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void saveUserRole(String uid, String email) {
-        // Save user details and role in Firestore
+        // Create a map to hold user data
         Map<String, Object> userData = new HashMap<>();
         userData.put("userId", uid); // Store userId in Firestore
         userData.put("email", email);
         userData.put("role", "user"); // Assign default role
         userData.put("location", new HashMap<String, String>()); // Initialize location as a map to prevent null errors
 
+        // Save the user data in Firestore under the "users" collection
         FirebaseFirestore.getInstance().collection("users")
                 .document(uid)
                 .set(userData)
@@ -116,9 +117,11 @@ public class RegisterActivity extends AppCompatActivity {
                     finish(); // Close RegisterActivity to remove it from the back stack
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(RegisterActivity.this, "Failed to save user role.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Failed to save user data.", Toast.LENGTH_SHORT).show();
+                    Log.e("RegisterActivity", "Error saving user data", e);
                 });
     }
+
 
 
     private boolean isPasswordValid(String password) {

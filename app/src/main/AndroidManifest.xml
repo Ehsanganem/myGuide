@@ -39,6 +39,9 @@
         <activity android:name=".UserProfileSetupActivity"/>
         <activity android:name=".CertificationDetailActivity"/>
         <activity android:name=".SearchGuidesActivity"/>
+        <activity android:name=".GuideDetailActivity"/>
+        <activity android:name=".BookingActivity"/>
+        <activity android:name=".BookingConfirmationActivity"/>
     </application>
 
 </manifest>

@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Guide Name -->
+    <TextView
+        android:id="@+id/textViewGuideName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guide Name"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Start Date Picker -->
+    <TextView
+        android:id="@+id/textViewStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Start Date"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <DatePicker
+        android:id="@+id/datePickerStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- End Date Picker -->
+    <TextView
+        android:id="@+id/textViewEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select End Date"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@android:color/darker_gray" />
+
+    <DatePicker
+        android:id="@+id/datePickerEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Total Cost -->
+    <TextView
+        android:id="@+id/textViewTotalCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Cost: $0"
+        android:textSize="18sp"
+        android:layout_gravity="center"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Submit Booking Button -->
+    <Button
+        android:id="@+id/buttonSubmitBooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit Booking"
+        android:backgroundTint="@android:color/holo_blue_dark"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center" />
+</LinearLayout>
