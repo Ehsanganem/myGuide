@@ -18,7 +18,6 @@
         app:title="MyGuide"
         app:titleTextColor="@android:color/white" />
 
-
     <!-- Navigation Options -->
     <LinearLayout
         android:layout_width="394dp"
@@ -31,9 +30,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!-- View Guides ImageView -->
-
-        <!-- Manage Bookings ImageView -->
-
         <ImageView
             android:id="@+id/searchGuides"
             android:layout_width="204dp"
@@ -46,6 +42,7 @@
             android:padding="16dp"
             android:src="@drawable/findguidepic" />
 
+        <!-- Manage Bookings ImageView -->
         <ImageView
             android:id="@+id/imageViewManageBookings"
             android:layout_width="200dp"

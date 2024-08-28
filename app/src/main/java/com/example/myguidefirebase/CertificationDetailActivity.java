@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CertificationDetailActivity extends AppCompatActivity {
 
     private TextView textViewUserName, textViewUserEmail, textViewUserRequest;
@@ -96,7 +99,7 @@ public class CertificationDetailActivity extends AppCompatActivity {
                         if (certification != null) {
                             db.collection("certifications")
                                     .document(certificationId)
-                                    .update("certificationStatus", status, "adminComments", adminComments) // Use "certificationStatus"
+                                    .update("certificationStatus", status, "adminComments", adminComments)
                                     .addOnSuccessListener(aVoid -> {
                                         Toast.makeText(this, "Certification " + status, Toast.LENGTH_SHORT).show();
 
@@ -104,10 +107,9 @@ public class CertificationDetailActivity extends AppCompatActivity {
                                         String newRole;
 
                                         if (status.equals("approved")) {
-                                            // Determine the role based on whether the guide is certified or not
                                             newRole = certification.isCertified() ? "certified_guide" : "uncertified_guide";
                                         } else {
-                                            newRole = "user";  // Keep as user if not approved
+                                            newRole = "user";
                                         }
 
                                         if (userId != null) {
@@ -115,6 +117,9 @@ public class CertificationDetailActivity extends AppCompatActivity {
                                                     .update("role", newRole)
                                                     .addOnSuccessListener(unused -> {
                                                         Toast.makeText(CertificationDetailActivity.this, "User role updated to " + newRole, Toast.LENGTH_SHORT).show();
+
+                                                        // Send notification
+                                                        sendNotificationToUser(userId, status, adminComments);
                                                         finish();
                                                     })
                                                     .addOnFailureListener(e -> Toast.makeText(CertificationDetailActivity.this, "Failed to update user role: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -134,5 +139,26 @@ public class CertificationDetailActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to retrieve certification: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
+
+    private void sendNotificationToUser(String userId, String status, String adminComments) {
+        String title = status.equals("approved") ? "Guide Application Approved" : "Guide Application Denied";
+        String message = "Your application to become a guide has been " + status + ". Admin Comments: " + adminComments;
+
+        Map<String, Object> notification = new HashMap<>();
+        notification.put("title", title);
+        notification.put("message", message);
+        notification.put("isRead", false);
+
+        FirebaseFirestore.getInstance()
+                .collection("notifications")
+                .document(userId)
+                .collection("userNotifications")
+                .add(notification)
+                .addOnSuccessListener(documentReference -> {
+                    // Notification successfully added to Firestore
+                })
+                .addOnFailureListener(e -> Toast.makeText(CertificationDetailActivity.this, "Failed to send notification: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
 
 }
