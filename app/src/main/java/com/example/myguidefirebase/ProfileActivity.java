@@ -1,45 +1,61 @@
 package com.example.myguidefirebase;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.mukesh.countrypicker.CountryPicker;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-
 public class ProfileActivity extends AppCompatActivity {
 
-    private EditText editTextName, editTextAbout, editTextEmail, editTextPhone, editTextLocation, editTextPricePerDay;
-    private LinearLayout checkboxGroupServices;
+    private static final int PICK_IMAGE_REQUEST = 1;
 
+    private EditText editTextName, editTextAbout, editTextEmail, editTextPhone, editTextPricePerDay;
+    private TextView textViewLocation, textViewLanguages;
+    private Button buttonSelectCountry, buttonEditServices, buttonEditSave, buttonEditLanguages;
+    private ImageView imageViewProfile, imageViewEditProfilePicture, imageViewCertifiedLogo;
+    private LinearLayout checkboxGroupServices;
     private CardView guideFieldsLayout;
-    private TextView textViewCertificationStatus, textViewLanguages;
-    private Button buttonEditServices, buttonEditSave, buttonEditLanguages;
     private boolean isEditMode = false;
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
+    private FirebaseStorage storage;
+    private String userId;
     private String userRole;
 
     @Override
@@ -52,33 +68,37 @@ public class ProfileActivity extends AppCompatActivity {
         editTextAbout = findViewById(R.id.editTextAbout);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPhone = findViewById(R.id.editTextPhone);
-        editTextLocation = findViewById(R.id.editTextLocation);
+        textViewLocation = findViewById(R.id.textViewSelectedCountry);
         editTextPricePerDay = findViewById(R.id.editTextPricePerDay);
         checkboxGroupServices = findViewById(R.id.checkboxGroupServices);
         guideFieldsLayout = findViewById(R.id.guideFieldsLayout);
-        textViewCertificationStatus = findViewById(R.id.textViewCertificationStatus);
         textViewLanguages = findViewById(R.id.textViewLanguages);
+        buttonSelectCountry = findViewById(R.id.buttonSelectCountry);
         buttonEditServices = findViewById(R.id.buttonEditServices);
         buttonEditSave = findViewById(R.id.buttonEditSave);
         buttonEditLanguages = findViewById(R.id.buttonEditLanguages);
+        imageViewProfile = findViewById(R.id.imageViewProfile);
+        imageViewEditProfilePicture = findViewById(R.id.imageViewEditProfilePicture);
+        imageViewCertifiedLogo = findViewById(R.id.imageViewCertifiedLogo);
+
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        storage = FirebaseStorage.getInstance();
+        userId = auth.getCurrentUser().getUid();
 
         // Load user profile data
         loadUserProfile();
 
         // Set up button click listeners
-        buttonEditSave.setOnClickListener(v -> {
-            Log.d("ProfileActivity", "Edit/Save button clicked");
-            toggleEditSave();
-        });
-
+        buttonEditSave.setOnClickListener(v -> toggleEditSave());
         buttonEditServices.setOnClickListener(v -> openEditServicesDialog());
         buttonEditLanguages.setOnClickListener(v -> openEditLanguagesDialog());
+        buttonSelectCountry.setOnClickListener(v -> showCountryPicker());
+        imageViewEditProfilePicture.setOnClickListener(v -> showProfilePictureOptions());
     }
 
     private void loadUserProfile() {
-        String userId = auth.getCurrentUser().getUid();
-        FirebaseFirestore.getInstance().collection("users").document(userId).get().addOnCompleteListener(task -> {
+        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
@@ -94,56 +114,36 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void populateUIWithUserData(User user) {
-        // Populate general user info
         editTextName.setText(user.getName());
         editTextAbout.setText(user.getBio());
         editTextEmail.setText(user.getEmail());
         editTextPhone.setText(user.getPhoneNumber());
+        textViewLocation.setText(user.getLocation().get("country"));
 
-        // Set role and handle guide-specific UI elements
-        userRole = user.getRole();
-        if (user.isGuide()) {
-            guideFieldsLayout.setVisibility(View.VISIBLE);
-            textViewCertificationStatus.setVisibility(View.VISIBLE);
-            textViewCertificationStatus.setText(user.getCertificationStatus());
-            editTextPricePerDay.setText(user.getPricePerDay());
-
-            populateServicesCheckboxes(user.getServices());
-
-            // Display the list of languages as a comma-separated string
-            textViewLanguages.setText(TextUtils.join(", ", user.getLanguages()));
-
-            // Handle location as a Map<String, String>
-            if (user.getLocation() != null) {
-                Map<String, String> location = user.getLocation();
-                editTextLocation.setText(location.get("country")); // Adjust as needed
-            }
-
-            if (user.isCertifiedGuide()) {
-                ImageView imageViewCertifiedLogo = findViewById(R.id.imageViewCertifiedLogo);
-                imageViewCertifiedLogo.setVisibility(View.VISIBLE);
-            }
-
-            // Allow editing even if certification is pending
-            if ("pending".equals(user.getCertificationStatus())) {
-                Toast.makeText(ProfileActivity.this, "Your certification is pending approval.", Toast.LENGTH_SHORT).show();
+        if (user.getRole() != null) {
+            userRole = user.getRole();
+            if (user.isGuide()) {
+                guideFieldsLayout.setVisibility(View.VISIBLE);
+                editTextPricePerDay.setText(user.getPricePerDay());
+                populateServicesCheckboxes(user.getServices());
+                textViewLanguages.setText(TextUtils.join(", ", user.getLanguages()));
+                if (user.isCertifiedGuide()) {
+                    imageViewCertifiedLogo.setVisibility(View.VISIBLE);
+                }
             }
         }
+
+        Glide.with(this).load(user.getIdPhotoUrl()).into(imageViewProfile);
     }
 
     private void toggleEditSave() {
-        Log.d("ProfileActivity", "toggleEditSave called. isEditMode: " + isEditMode);
         if (isEditMode) {
             if (validateFields()) {
                 saveUserProfile();
-                Log.d("ProfileActivity", "Profile saved.");
-            } else {
-                Log.d("ProfileActivity", "Validation failed.");
             }
         } else {
             enableEditing(true);
             buttonEditSave.setText("Save");
-            Log.d("ProfileActivity", "Editing enabled.");
         }
         isEditMode = !isEditMode;
     }
@@ -151,11 +151,8 @@ public class ProfileActivity extends AppCompatActivity {
     private void enableEditing(boolean enabled) {
         editTextName.setEnabled(enabled);
         editTextAbout.setEnabled(enabled);
-        editTextEmail.setEnabled(false);  // Email should not be editable
         editTextPhone.setEnabled(enabled);
-        editTextLocation.setEnabled(enabled);
-        editTextPricePerDay.setEnabled(enabled);
-
+        buttonSelectCountry.setEnabled(enabled);
         if (userRole != null && (userRole.equals("certified_guide") || userRole.equals("uncertified_guide"))) {
             buttonEditServices.setEnabled(enabled);
             buttonEditLanguages.setEnabled(enabled);
@@ -163,28 +160,24 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void saveUserProfile() {
-        String userId = auth.getCurrentUser().getUid();
         Map<String, Object> userProfileUpdates = new HashMap<>();
         userProfileUpdates.put("name", editTextName.getText().toString());
         userProfileUpdates.put("bio", editTextAbout.getText().toString());
         userProfileUpdates.put("phoneNumber", editTextPhone.getText().toString());
 
         // Save location as a Map
-        String locationString = editTextLocation.getText().toString();
         Map<String, String> locationMap = new HashMap<>();
-        locationMap.put("country", locationString);
+        locationMap.put("country", textViewLocation.getText().toString());
         userProfileUpdates.put("location", locationMap);
-
         userProfileUpdates.put("role", userRole);
 
         if (guideFieldsLayout.getVisibility() == View.VISIBLE) {
             userProfileUpdates.put("pricePerDay", editTextPricePerDay.getText().toString());
-            userProfileUpdates.put("languages", getSelectedLanguages());  // Ensure this is a list
+            userProfileUpdates.put("languages", getSelectedLanguages());
             userProfileUpdates.put("services", getSelectedServices());
-            userProfileUpdates.put("certificationStatus", textViewCertificationStatus.getText().toString());
         }
 
-        FirebaseFirestore.getInstance().collection("users").document(userId)
+        db.collection("users").document(userId)
                 .set(userProfileUpdates, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(ProfileActivity.this, "Profile saved successfully", Toast.LENGTH_SHORT).show();
@@ -214,7 +207,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private List<String> getSelectedLanguages() {
-        // Split the languages string into a list
         return Arrays.asList(textViewLanguages.getText().toString().split(",\\s*"));
     }
 
@@ -303,5 +295,97 @@ public class ProfileActivity extends AppCompatActivity {
 
         builder.create().show();
     }
-}
 
+    private void showCountryPicker() {
+        CountryPicker picker = new CountryPicker.Builder().with(this)
+                .listener(country -> textViewLocation.setText(country.getName()))
+                .build();
+
+        picker.showDialog(ProfileActivity.this);
+    }
+
+    private void showProfilePictureOptions() {
+        PopupMenu popupMenu = new PopupMenu(this, imageViewEditProfilePicture);
+        popupMenu.getMenuInflater().inflate(R.menu.profile_image_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(this::onProfilePictureOptionSelected);
+        popupMenu.show();
+    }
+
+    private boolean onProfilePictureOptionSelected(MenuItem menuItem) {
+        int itemId = menuItem.getItemId();
+        if (itemId == R.id.action_upload || itemId == R.id.action_change) {
+            openFileChooser();
+            return true;
+        } else if (itemId == R.id.action_delete) {
+            deleteProfileImage();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                uploadProfileImage(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void uploadProfileImage(Bitmap bitmap) {
+        StorageReference storageRef = storage.getReference("profile_images/" + userId + ".jpg");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+        uploadTask.addOnSuccessListener(taskSnapshot -> storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            String imageUrl = uri.toString();
+            updateProfileImageInFirestore(imageUrl);
+        })).addOnFailureListener(e -> {
+            Toast.makeText(ProfileActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void updateProfileImageInFirestore(String imageUrl) {
+        db.collection("users").document(userId)
+                .update("idPhotoUrl", imageUrl)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(ProfileActivity.this, "Profile picture updated", Toast.LENGTH_SHORT).show();
+                    loadImage(imageUrl);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(ProfileActivity.this, "Failed to update profile picture", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void deleteProfileImage() {
+        StorageReference storageRef = storage.getReference("profile_images/" + userId + ".jpg");
+        storageRef.delete().addOnSuccessListener(aVoid -> {
+            String defaultImageUrl = "url_of_your_default_empty_image";  // Replace with your default image URL
+            updateProfileImageInFirestore(defaultImageUrl);
+            loadImage(defaultImageUrl);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(ProfileActivity.this, "Failed to delete profile picture", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void loadImage(String imageUrl) {
+        Glide.with(this).load(imageUrl).into(imageViewProfile);
+    }
+}

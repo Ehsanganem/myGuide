@@ -73,6 +73,39 @@
                     android:layout_marginTop="8dp" />
             </RelativeLayout>
 
+            <!-- Country Field -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Country"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewSelectedCountry"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Country"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_marginTop="8dp" />
+
+                <Button
+                    android:id="@+id/buttonSelectCountry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select Country"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="8dp" />
+            </RelativeLayout>
+
             <!-- Languages Field -->
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -87,37 +120,22 @@
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
-                <MultiAutoCompleteTextView
-                    android:id="@+id/editTextLanguages"
+                <TextView
+                    android:id="@+id/textViewSelectedLanguages"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Select languages"
+                    android:text="Select Languages"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:layout_marginTop="8dp" />
-            </RelativeLayout>
 
-            <!-- Location Field -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp">
-
-                <TextView
+                <Button
+                    android:id="@+id/buttonSelectLanguages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/editTextLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Enter your location"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
+                    android:text="Select Languages"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="8dp" />
             </RelativeLayout>
 

@@ -101,7 +101,8 @@ public class SearchGuidesActivity extends AppCompatActivity {
 
     private void openServicesSelectionDialog() {
         // Multi-selection dialog for services
-        String[] servicesArray = {"Hiking Trips", "Museums", "Nightlife", "City Tours", "Food and Drink Tours"};
+        String[] servicesArray = {"Hiking Trips", "Museums", "Nightlife", "City Tours", "Food and Drink Tours",
+                "Adventure Sports", "Historical Sites", "Art Galleries", "Shopping Tours", "Cultural Experiences"};
 
         boolean[] checkedServices = new boolean[servicesArray.length];
         for (int i = 0; i < servicesArray.length; i++) {
@@ -123,7 +124,6 @@ public class SearchGuidesActivity extends AppCompatActivity {
     }
 
     private void performSearch() {
-        // Use the selectedCountry variable instead of spinnerCountry
         if (selectedCountry == null || selectedCountry.isEmpty()) {
             Toast.makeText(this, "Please select a country", Toast.LENGTH_SHORT).show();
             return;
@@ -139,44 +139,60 @@ public class SearchGuidesActivity extends AppCompatActivity {
             return;
         }
 
-        // Perform the first query with the country filter
-        Query query = db.collection("users")
-                .whereEqualTo("role", "certified_guide") // Filter for certified guides
-                .whereEqualTo("location.country", selectedCountry);
+        // Create a list to hold all results
+        List<User> combinedResults = new ArrayList<>();
 
-        // Add filters for the languages and services using whereArrayContains
-        if (!selectedLanguages.isEmpty()) {
-            query = query.whereArrayContains("languages", selectedLanguages.get(0)); // Example for one language
-        }
-
-        // Execute the query
-        query.get()
+        // Query for certified guides
+        db.collection("users")
+                .whereEqualTo("location.country", selectedCountry)
+                .whereEqualTo("role", "certified_guide")
+                .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        List<User> initialResult = task.getResult().toObjects(User.class);
+                        List<User> certifiedGuides = task.getResult().toObjects(User.class);
+                        combinedResults.addAll(certifiedGuides);
 
-                        // Filter results by services manually
-                        List<User> filteredResult = new ArrayList<>();
-                        for (User user : initialResult) {
-                            if (user.getServices().containsAll(selectedServices)) {
-                                filteredResult.add(user);
-                            }
-                        }
+                        // Query for uncertified guides
+                        db.collection("users")
+                                .whereEqualTo("location.country", selectedCountry)
+                                .whereEqualTo("role", "uncertified_guide")
+                                .get()
+                                .addOnCompleteListener(uncertifiedTask -> {
+                                    if (uncertifiedTask.isSuccessful()) {
+                                        List<User> uncertifiedGuides = uncertifiedTask.getResult().toObjects(User.class);
+                                        combinedResults.addAll(uncertifiedGuides);
 
-                        // Update the RecyclerView with the filtered results
-                        guidesList.clear();
-                        guidesList.addAll(filteredResult);
-                        usersAdapter.notifyDataSetChanged();
+                                        // Filter the combined list based on selected languages and services
+                                        List<User> filteredResults = new ArrayList<>();
+                                        for (User user : combinedResults) {
+                                            if (user.getLanguages().containsAll(selectedLanguages) &&
+                                                    user.getServices().containsAll(selectedServices)) {
+                                                filteredResults.add(user);
+                                            }
+                                        }
 
-                        if (filteredResult.isEmpty()) {
-                            Toast.makeText(SearchGuidesActivity.this, "No guides found matching your criteria", Toast.LENGTH_SHORT).show();
-                        }
+                                        // Update the RecyclerView with the filtered results
+                                        guidesList.clear();
+                                        guidesList.addAll(filteredResults);
+                                        usersAdapter.notifyDataSetChanged();
+
+                                        if (filteredResults.isEmpty()) {
+                                            Toast.makeText(SearchGuidesActivity.this, "No guides found matching your criteria", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Log.e("SearchGuidesActivity", "Error getting uncertified guides", uncertifiedTask.getException());
+                                        Toast.makeText(SearchGuidesActivity.this, "Error retrieving uncertified guides", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     } else {
-                        Log.e("SearchGuidesActivity", "Error getting guides", task.getException());
-                        Toast.makeText(SearchGuidesActivity.this, "Error retrieving guides", Toast.LENGTH_SHORT).show();
+                        Log.e("SearchGuidesActivity", "Error getting certified guides", task.getException());
+                        Toast.makeText(SearchGuidesActivity.this, "Error retrieving certified guides", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+
+
 
 
 }

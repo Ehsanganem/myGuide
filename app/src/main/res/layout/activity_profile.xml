@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:title="Profile"
+        android:title="Profile"
         android:titleTextColor="@android:color/white" />
 
     <!-- Scrollable content -->
@@ -27,38 +27,6 @@
             android:orientation="vertical"
             android:padding="15dp">
 
-            <!-- Profile Title -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Profile"
-                android:textStyle="bold"
-                android:textSize="30sp"
-                android:layout_gravity="center"
-                android:textColor="@color/black" />
-
-            <!-- Certification Status (non-editable) -->
-            <TextView
-                android:id="@+id/textViewCertificationStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Certification Status"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:visibility="gone" />
-
-            <!-- Certified Guide Logo (Initially Hidden) -->
-            <ImageView
-                android:id="@+id/imageViewCertifiedLogo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/certified"
-                android:visibility="gone" />
-
             <!-- Profile Picture and Name -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -66,31 +34,60 @@
                 app:cardCornerRadius="10dp"
                 android:layout_marginTop="20dp">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_height="267dp"
                     android:padding="15dp">
 
                     <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/imageViewProfile"
+                        style="@style/CircleImageView"
                         android:layout_width="150dp"
                         android:layout_height="150dp"
-                        android:layout_gravity="center"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="106dp"
+                        android:layout_marginTop="20dp"
                         android:src="@drawable/emptypic" />
+
+                    <ImageView
+                        android:id="@+id/imageViewEditProfilePicture"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignTop="@id/imageViewProfile"
+                        android:layout_alignEnd="@id/imageViewProfile"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="-40dp"
+                        android:layout_marginBottom="10dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/edit" />
 
                     <EditText
                         android:id="@+id/editTextName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="15dp"
+                        android:layout_below="@id/imageViewProfile"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginStart="105dp"
+                        android:layout_marginTop="7dp"
                         android:enabled="false"
                         android:hint="Write your name"
                         android:textAlignment="center"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold" />
-                </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageViewCertifiedLogo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/certified"
+                        android:visibility="gone"/>
+                </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- User Information Section -->
@@ -124,10 +121,8 @@
 
                         <EditText
                             android:id="@+id/editTextAbout"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginTop="30dp"
                             android:enabled="false"
                             android:hint="Who am I?"
                             android:textColor="@color/black"
@@ -154,11 +149,11 @@
                         <EditText
                             android:id="@+id/editTextEmail"
                             android:layout_width="231dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:enabled="false"
                             android:hint="Write your email"
-                            android:textColor="#6E6C6C"
+                            android:textColor="@color/black"
                             android:textSize="15sp" />
                     </RelativeLayout>
 
@@ -182,12 +177,49 @@
                         <EditText
                             android:id="@+id/editTextPhone"
                             android:layout_width="231dp"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:enabled="false"
                             android:hint="Enter your phone number"
-                            android:textColor="#6E6C6C"
+                            android:textColor="@color/black"
                             android:textSize="15sp" />
+                    </RelativeLayout>
+
+                    <!-- Location Section -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:text="Location"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textViewSelectedCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toStartOf="@id/buttonSelectCountry"
+                            android:text="Select Country"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <Button
+                            android:id="@+id/buttonSelectCountry"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Select Country"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="8dp" />
                     </RelativeLayout>
 
                     <!-- Languages Section -->
@@ -211,7 +243,7 @@
                             android:id="@+id/textViewLanguages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_toStartOf="@id/buttonEditLanguages"
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:textStyle="bold" />
@@ -224,34 +256,6 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_marginTop="10dp" />
-                    </RelativeLayout>
-
-                    <!-- Location Field -->
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="10dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:text="Where From"
-                            android:textColor="@color/black"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                        <EditText
-                            android:id="@+id/editTextLocation"
-                            android:layout_width="182dp"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentEnd="true"
-                            android:enabled="false"
-                            android:hint="Enter your location"
-                            android:textColor="#6E6C6C"
-                            android:textSize="15sp" />
                     </RelativeLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -271,18 +275,6 @@
                     android:orientation="vertical"
                     android:padding="15dp">
 
-                    <!-- Certification Status (non-editable) -->
-                    <TextView
-                        android:id="@+id/textViewGuideCertificationStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Certification Status"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:layout_marginBottom="10dp"
-                        android:layout_gravity="center" />
-
-                    <!-- Services Field -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -303,17 +295,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginTop="10dp"
-                            android:layout_alignParentEnd="true">
-                        </LinearLayout>
+                            android:layout_toStartOf="@id/buttonEditServices"
+                            android:layout_alignParentEnd="true" />
 
+                        <!-- The button to edit services -->
                         <Button
                             android:id="@+id/buttonEditServices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Edit Services"
                             android:layout_alignParentEnd="true"
-                            android:layout_marginStart="8dp"
                             android:layout_alignParentRight="true"
                             android:layout_marginTop="10dp" />
                     </RelativeLayout>
@@ -339,7 +330,7 @@
                             android:id="@+id/editTextPricePerDay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#6E6C6C"
+                            android:textColor="@color/black"
                             android:hint="Enter your price"
                             android:textSize="15sp"
                             android:layout_alignParentEnd="true" />
@@ -359,7 +350,7 @@
                 android:text="Edit"
                 android:enabled="true"
                 android:clickable="true"
-                android:focusable="true"/>
+                android:focusable="true" />
 
         </LinearLayout>
     </ScrollView>
