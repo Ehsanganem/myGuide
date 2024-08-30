@@ -71,14 +71,16 @@ public class LoginActivity extends AppCompatActivity {
                     });
         });
 
+        // Set up the forgot password button click handlerbuttonForgotPassword.setOnClickListener(v -> {
         // Set up the forgot password button click handler
-//        buttonForgotPassword.setOnClickListener(v -> {
-//            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-//            startActivity(intent);
-//        });
+        buttonForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
     }
 
-    private void checkUserVerificationAndRole(FirebaseUser user) {
+
+        private void checkUserVerificationAndRole(FirebaseUser user) {
         if (user != null && !user.isEmailVerified()) {
             Toast.makeText(this, "Please verify your email before logging in.", Toast.LENGTH_LONG).show();
             FirebaseAuth.getInstance().signOut(); // Log the user out if not verified

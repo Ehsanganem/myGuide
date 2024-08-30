@@ -44,6 +44,7 @@
         <activity android:name=".BookingConfirmationActivity"/>
         <activity android:name=".NotificationActivity"/>
         <activity android:name=".BookingManagementActivity"/>
+        <activity android:name=".ForgotPasswordActivity" />
 
         <!-- Firebase Messaging Service -->
         <service

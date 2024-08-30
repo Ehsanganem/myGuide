@@ -65,11 +65,20 @@ public class CertificationDetailActivity extends AppCompatActivity {
                             textViewUserEmail.setText(certification.getUserEmail());
                             textViewUserRequest.setText(certification.getUserRequest());
 
+                            // Load ID photo with Glide
                             Glide.with(this)
                                     .load(certification.getIdPhotoUrl())
+                                    .placeholder(R.drawable.placeholder)  // Add a placeholder image
+                                    .error(R.drawable.error_image)  // Handle error case
                                     .into(imageViewIdPhoto);
 
-                            webViewCertification.loadUrl(certification.getCertificationUrl());
+                            // Load certification PDF in WebView
+                            if (certification.getCertificationUrl() != null && !certification.getCertificationUrl().isEmpty()) {
+                                webViewCertification.getSettings().setJavaScriptEnabled(true);
+                                webViewCertification.loadUrl("https://docs.google.com/gview?embedded=true&url=" + certification.getCertificationUrl());
+                            } else {
+                                Toast.makeText(this, "Certification document not available.", Toast.LENGTH_SHORT).show();
+                            }
 
                             if (certification.getAdminComments() != null) {
                                 editTextAdminComments.setText(certification.getAdminComments());
@@ -99,7 +108,7 @@ public class CertificationDetailActivity extends AppCompatActivity {
                         if (certification != null) {
                             db.collection("certifications")
                                     .document(certificationId)
-                                    .update("certificationStatus", status, "adminComments", adminComments)
+                                    .update("status", status, "adminComments", adminComments)
                                     .addOnSuccessListener(aVoid -> {
                                         Toast.makeText(this, "Certification " + status, Toast.LENGTH_SHORT).show();
 
@@ -159,6 +168,4 @@ public class CertificationDetailActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> Toast.makeText(CertificationDetailActivity.this, "Failed to send notification: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-
-
 }
