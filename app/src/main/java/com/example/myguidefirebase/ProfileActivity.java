@@ -57,6 +57,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private String userId;
     private String userRole;
+    private String viewedUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,12 @@ public class ProfileActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         userId = auth.getCurrentUser().getUid();
 
+        // Check if viewing another user's profile
+        viewedUserId = getIntent().getStringExtra("userId");
+        if (viewedUserId == null) {
+            viewedUserId = userId; // Default to own profile if no userId is passed
+        }
+
         // Load user profile data
         loadUserProfile();
 
@@ -98,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserProfile() {
-        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
+        db.collection("users").document(viewedUserId).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document != null && document.exists()) {
@@ -134,6 +141,20 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         Glide.with(this).load(user.getIdPhotoUrl()).into(imageViewProfile);
+
+        // Disable editing if viewing another user's profile
+        if (!viewedUserId.equals(userId)) {
+            hideEditingFeatures();
+        }
+    }
+
+    private void hideEditingFeatures() {
+        buttonEditSave.setVisibility(View.GONE);
+        buttonEditServices.setVisibility(View.GONE);
+        buttonEditLanguages.setVisibility(View.GONE);
+        buttonSelectCountry.setVisibility(View.GONE);
+        imageViewEditProfilePicture.setVisibility(View.GONE);
+        enableEditing(false); // Disable all editing fields
     }
 
     private void toggleEditSave() {

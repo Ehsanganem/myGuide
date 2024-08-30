@@ -85,6 +85,26 @@
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/holo_red_dark" />
 
+        <!-- View Full Profile Button -->
+        <Button
+            android:id="@+id/buttonViewProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View Full Profile"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Contact Guide Button -->
+        <Button
+            android:id="@+id/buttonContactGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Guide"
+            android:backgroundTint="@color/primaryColor"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp"/>
+
         <!-- Booking Button -->
         <Button
             android:id="@+id/buttonRequestBooking"

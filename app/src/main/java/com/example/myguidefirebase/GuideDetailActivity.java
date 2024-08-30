@@ -1,6 +1,7 @@
 package com.example.myguidefirebase;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,7 +20,7 @@ public class GuideDetailActivity extends AppCompatActivity {
 
     private ImageView imageViewProfilePic;
     private TextView textViewName, textViewRole, textViewBio, textViewServices, textViewPricePerDay, textViewBookedDates;
-    private Button buttonRequestBooking;
+    private Button buttonRequestBooking, buttonViewProfile, buttonContactGuide;
     private User selectedGuide;
     private FirebaseFirestore db;
 
@@ -36,6 +37,8 @@ public class GuideDetailActivity extends AppCompatActivity {
         textViewPricePerDay = findViewById(R.id.textViewPricePerDay);
         textViewBookedDates = findViewById(R.id.textViewBookedDates);
         buttonRequestBooking = findViewById(R.id.buttonRequestBooking);
+        buttonViewProfile = findViewById(R.id.buttonViewProfile);
+        buttonContactGuide = findViewById(R.id.buttonContactGuide);
 
         db = FirebaseFirestore.getInstance();
 
@@ -63,6 +66,21 @@ public class GuideDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(GuideDetailActivity.this, BookingActivity.class);
             intent.putExtra("selectedGuide", selectedGuide);
             startActivity(intent);
+        });
+
+        // View Full Profile
+        buttonViewProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(GuideDetailActivity.this, ProfileActivity.class);
+            intent.putExtra("userId", selectedGuide.getUserId()); // Pass the guide's userId
+            startActivity(intent);
+        });
+
+        // Contact Guide (For example, open email client)
+        buttonContactGuide.setOnClickListener(v -> {
+            Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                    "mailto", selectedGuide.getEmail(), null));
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Inquiry about Guide Services");
+            startActivity(Intent.createChooser(emailIntent, "Send email..."));
         });
     }
 
