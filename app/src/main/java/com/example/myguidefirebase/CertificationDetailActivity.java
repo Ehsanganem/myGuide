@@ -61,7 +61,7 @@ public class CertificationDetailActivity extends AppCompatActivity {
                         Certification certification = documentSnapshot.toObject(Certification.class);
 
                         if (certification != null) {
-                            textViewUserName.setText(certification.getUserName());
+                            textViewUserName.setText(certification.getUserName() != null ? certification.getUserName() : "No name provided");
                             textViewUserEmail.setText(certification.getUserEmail());
                             textViewUserRequest.setText(certification.getUserRequest());
 

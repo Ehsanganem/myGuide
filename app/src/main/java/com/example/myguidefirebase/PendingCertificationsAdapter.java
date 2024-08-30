@@ -28,7 +28,7 @@ public class PendingCertificationsAdapter extends RecyclerView.Adapter<PendingCe
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Certification certification = pendingCertifications.get(position);
-        holder.textViewUserName.setText(certification.getUserName());
+        holder.textViewUserName.setText(certification.getUserName() != null ? certification.getUserName() : "No name provided");
         holder.textViewUserEmail.setText(certification.getUserEmail());
         holder.textViewStatus.setText(certification.getStatus());
 

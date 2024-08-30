@@ -27,10 +27,15 @@ public class PendingCertificationsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         pendingCertifications = new ArrayList<>();
         adapter = new PendingCertificationsAdapter(pendingCertifications, certification -> {
-            Intent intent = new Intent(PendingCertificationsActivity.this, CertificationDetailActivity.class);
-            intent.putExtra("certificationId", certification.getCertificationId());
-            intent.putExtra("userId", certification.getUserId());  // Passing userId
-            startActivity(intent);
+            // Check if the important fields are not null before proceeding
+            if (certification.getCertificationId() != null && certification.getUserId() != null) {
+                Intent intent = new Intent(PendingCertificationsActivity.this, CertificationDetailActivity.class);
+                intent.putExtra("certificationId", certification.getCertificationId());
+                intent.putExtra("userId", certification.getUserId());  // Passing userId
+                startActivity(intent);
+            } else {
+                Toast.makeText(PendingCertificationsActivity.this, "Invalid certification data", Toast.LENGTH_SHORT).show();
+            }
         });
         recyclerView.setAdapter(adapter);
 
@@ -46,8 +51,12 @@ public class PendingCertificationsActivity extends AppCompatActivity {
                         pendingCertifications.clear();
                         for (DocumentSnapshot document : task.getResult()) {
                             Certification certification = document.toObject(Certification.class);
-                            Log.d("PendingCertifications", "Fetched: " + certification.getUserName());
-                            pendingCertifications.add(certification);
+                            if (certification != null && certification.getCertificationId() != null) {
+                                Log.d("PendingCertifications", "Fetched: " + certification.getUserName());
+                                pendingCertifications.add(certification);
+                            } else {
+                                Log.w("PendingCertifications", "Invalid certification data skipped.");
+                            }
                         }
                         adapter.notifyDataSetChanged();
                     } else {
