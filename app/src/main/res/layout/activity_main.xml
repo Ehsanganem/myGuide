@@ -9,7 +9,7 @@
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         app:layout_constraintTop_toTopOf="parent"
@@ -18,42 +18,60 @@
         app:title="MyGuide"
         app:titleTextColor="@android:color/white" />
 
-    <!-- Navigation Options -->
-    <LinearLayout
-        android:layout_width="394dp"
-        android:layout_height="391dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- View Guides CardView -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewSearchGuides"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/cardViewManageBookings"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.4">
 
-        <!-- View Guides ImageView -->
         <ImageView
             android:id="@+id/searchGuides"
-            android:layout_width="204dp"
-            android:layout_height="344dp"
-            android:layout_margin="16dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="View Guides"
             android:focusable="true"
-            android:padding="16dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/findguidepic" />
+    </com.google.android.material.card.MaterialCardView>
 
-        <!-- Manage Bookings ImageView -->
+    <!-- Manage Bookings CardView -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewManageBookings"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:strokeColor="@android:color/darker_gray"
+        app:strokeWidth="2dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cardViewSearchGuides"
+        app:layout_constraintWidth_percent="0.6"
+        app:layout_constraintHeight_percent="0.4">
+
         <ImageView
             android:id="@+id/imageViewManageBookings"
-            android:layout_width="200dp"
-            android:layout_height="277dp"
-            android:layout_margin="16dp"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clickable="true"
             android:contentDescription="Manage Bookings"
             android:focusable="true"
-            android:padding="16dp"
+            android:scaleType="centerCrop"
             android:src="@drawable/booktrippic" />
-    </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ImageView searchGuides;
+    private ImageView searchGuides, imageViewManageBookings; // Added ImageView for booking management
     private TextView notificationBadge;
 
     @Override
@@ -29,9 +29,19 @@ public class MainActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Initialize ImageViews
         searchGuides = findViewById(R.id.searchGuides);
+        imageViewManageBookings = findViewById(R.id.imageViewManageBookings); // Added initialization
+
+        // Set OnClickListener for Search Guides ImageView
         searchGuides.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, SearchGuidesActivity.class);
+            startActivity(intent);
+        });
+
+        // Set OnClickListener for Manage Bookings ImageView
+        imageViewManageBookings.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, BookingManagementActivity.class); // Assuming BookingManagementActivity exists
             startActivity(intent);
         });
     }
@@ -68,8 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
-
-
 
     private void updateNotificationCount() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();

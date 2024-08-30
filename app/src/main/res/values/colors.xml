@@ -24,4 +24,9 @@
     <color name="black">#000000</color>
     <color name="PeachPuff">#FFDAB9</color>
     <color name="Ivory">#FFFFF0	</color>
+    <color name="backgroundLight">#FFFFFF</color> <!-- Light background color -->
+    <color name="primaryTextColor">#212121</color> <!-- Primary text color -->
+    <color name="secondaryTextColor">#757575</color> <!-- Secondary text color -->
+
+    <color name="statusColor">#388E3C</color> <!-- Color for status text -->
 </resources>

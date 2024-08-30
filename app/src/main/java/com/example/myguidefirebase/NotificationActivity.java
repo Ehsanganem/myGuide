@@ -1,6 +1,9 @@
 package com.example.myguidefirebase;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,8 @@ public class NotificationActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewNotifications;
     private NotificationAdapter notificationAdapter;
+    private FirebaseFirestore db;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +32,21 @@ public class NotificationActivity extends AppCompatActivity {
         notificationAdapter = new NotificationAdapter(new ArrayList<>());
         recyclerViewNotifications.setAdapter(notificationAdapter);
 
+        db = FirebaseFirestore.getInstance();
+        userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         loadNotifications();
+
+        // Set up the Clear Notifications TextView
+        TextView textViewClearNotifications = findViewById(R.id.textViewClearNotifications);
+        textViewClearNotifications.setOnClickListener(v -> {
+            Log.d("NotificationActivity", "Clear Notifications clicked");
+            clearNotifications();
+        });
     }
 
     private void loadNotifications() {
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore.getInstance()
-                .collection("notifications")
+        db.collection("notifications")
                 .document(userId)
                 .collection("userNotifications")
                 .get()
@@ -43,8 +56,33 @@ public class NotificationActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Notification notification = document.toObject(Notification.class);
                             notifications.add(notification);
+
+                            // Mark the notification as read
+                            document.getReference().update("isRead", true);
                         }
                         notificationAdapter.updateNotifications(notifications);
+                    } else {
+                        Log.e("NotificationActivity", "Error fetching notifications", task.getException());
+                    }
+                });
+    }
+
+    private void clearNotifications() {
+        db.collection("notifications")
+                .document(userId)
+                .collection("userNotifications")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            document.getReference().delete()
+                                    .addOnSuccessListener(aVoid -> Log.d("NotificationActivity", "Notification deleted"))
+                                    .addOnFailureListener(e -> Log.e("NotificationActivity", "Error deleting notification", e));
+                        }
+                        notificationAdapter.updateNotifications(new ArrayList<>());
+                        Toast.makeText(NotificationActivity.this, "Notifications cleared", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e("NotificationActivity", "Error clearing notifications", task.getException());
                     }
                 });
     }
