@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ImageView searchGuides, imageViewManageBookings; // Added ImageView for booking management
+    private ImageView searchGuides, imageViewEnlistAsguide; // Added ImageView for booking management
     private TextView notificationBadge;
 
     @Override
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize ImageViews
         searchGuides = findViewById(R.id.searchGuides);
-        imageViewManageBookings = findViewById(R.id.imageViewManageBookings); // Added initialization
+        imageViewEnlistAsguide = findViewById(R.id.imageViewEnlistAsguide); // Added initialization
 
         // Set OnClickListener for Search Guides ImageView
         searchGuides.setOnClickListener(v -> {
@@ -40,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Set OnClickListener for Manage Bookings ImageView
-        imageViewManageBookings.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, BookingManagementActivity.class); // Assuming BookingManagementActivity exists
+        imageViewEnlistAsguide.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EnlistAsGuideActivity.class); // Assuming BookingManagementActivity exists
             startActivity(intent);
         });
     }
@@ -121,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_enlist_as_guide) {
-            Intent intent = new Intent(MainActivity.this, EnlistAsGuideActivity.class);
+        if (item.getItemId() == R.id.action_manage_bookings) {
+            Intent intent = new Intent(MainActivity.this, BookingManagementActivity.class);
             startActivity(intent);
             return true;
         }

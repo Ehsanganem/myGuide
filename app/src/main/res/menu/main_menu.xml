@@ -16,8 +16,8 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/action_enlist_as_guide"
-        android:title="@string/enlist_as_guide"
+        android:id="@+id/action_manage_bookings"
+        android:title="@string/manage_bookings"
         android:icon="@drawable/enlist"
         app:showAsAction="always" />
 

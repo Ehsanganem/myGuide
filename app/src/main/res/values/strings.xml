@@ -38,6 +38,7 @@
     <string name="enlist_as_guide">enlist_as_guide</string>
     <string name="enter_your_request_to_be_an_uncertified_guide">Enter your request to be an uncertified guide</string>
     <string name="id_photo">ID Photo</string>
+    <string name="manage_bookings">manage bookings\n</string>
     <string-array name="languages">
         <item>English</item>
         <item>Hebrew</item>
