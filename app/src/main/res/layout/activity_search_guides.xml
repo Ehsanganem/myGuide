@@ -2,64 +2,137 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/white"
     android:padding="16dp">
 
-    <!-- Country Selection -->
-    <Button
-        android:id="@+id/buttonSelectCountry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Country" />
+    <!-- Toolbar with Back Button -->
 
-    <TextView
-        android:id="@+id/textViewSelectedCountry"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Selected Country"
-        android:layout_marginTop="8dp" />
+    <!-- Content Section -->
 
-    <!-- Language Selection -->
-    <Button
-        android:id="@+id/buttonSelectLanguages"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Languages"
-        android:layout_marginTop="16dp" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="379dp"
+        android:layout_height="50dp"
+        android:background="@color/silver"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:title="Search Guides"
+        android:titleTextColor="@android:color/white" />
 
-    <TextView
-        android:id="@+id/textViewSelectedLanguages"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Selected Languages"
-        android:layout_marginTop="8dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-    <!-- Services Selection -->
-    <Button
-        android:id="@+id/buttonSelectServices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Services"
-        android:layout_marginTop="16dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <TextView
-        android:id="@+id/textViewSelectedServices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Selected Services"
-        android:layout_marginTop="8dp" />
+            <!-- Country Selection -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Country"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-    <!-- Search Button -->
-    <Button
-        android:id="@+id/buttonSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search Guides"
-        android:layout_marginTop="16dp" />
+            <Button
+                android:id="@+id/buttonSelectCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Country"
+                android:textColor="@android:color/white"
+                android:backgroundTint="?attr/colorAccent"
+                android:layout_marginTop="8dp" />
 
+            <TextView
+                android:id="@+id/textViewSelectedCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selected Country"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <!-- Language Selection -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Languages"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <Button
+                android:id="@+id/buttonSelectLanguages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Select Languages"
+                android:textColor="@android:color/white"
+                android:backgroundTint="?attr/colorAccent"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewSelectedLanguages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selected Languages"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <!-- Services Selection -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Services"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <Button
+                android:id="@+id/buttonSelectServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Select Services"
+                android:textColor="@android:color/white"
+                android:backgroundTint="?attr/colorAccent"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/textViewSelectedServices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Selected Services"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="8dp" />
+
+            <!-- Search Button -->
+            <Button
+                android:id="@+id/buttonSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="Search Guides"
+                android:textColor="@android:color/white"
+                android:backgroundTint="?attr/colorAccent"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- RecyclerView for Search Results -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewSearchResults"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:background="@android:color/white" />
 
 </LinearLayout>

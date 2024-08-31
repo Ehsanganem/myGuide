@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -47,7 +48,14 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enlist_as_guide);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
@@ -259,4 +267,5 @@ public class EnlistAsGuideActivity extends AppCompatActivity {
         intent.setType("application/pdf");
         startActivityForResult(intent, PICK_PDF_REQUEST);
     }
+
 }

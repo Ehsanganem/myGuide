@@ -1,0 +1,18 @@
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_home"
+        android:title="Home"
+        android:icon="@drawable/home"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_booking_management"
+        android:title="Manage Bookings"
+        android:icon="@drawable/booking"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout"
+        android:icon="@drawable/logout"
+        app:showAsAction="ifRoom" />
+</menu>

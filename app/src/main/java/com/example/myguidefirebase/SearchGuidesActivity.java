@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +40,12 @@ public class SearchGuidesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_guides);
 
         db = FirebaseFirestore.getInstance();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         buttonSelectCountry = findViewById(R.id.buttonSelectCountry);
         textViewSelectedCountry = findViewById(R.id.textViewSelectedCountry);
         buttonSelectLanguages = findViewById(R.id.buttonSelectLanguages);

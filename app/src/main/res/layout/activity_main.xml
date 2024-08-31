@@ -9,6 +9,7 @@
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        android:background="@color/silver"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:paddingStart="0dp"
@@ -74,7 +75,7 @@
             android:contentDescription="Manage Bookings"
             android:focusable="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/booktrippic" />
+            android:src="@drawable/enlistasguidepic" />
     </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

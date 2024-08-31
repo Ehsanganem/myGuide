@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
+        android:backgroundTint="@color/silver"
         android:title="Profile Setup"
         android:titleTextColor="@android:color/white" />
 
@@ -17,7 +18,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,16 +39,18 @@
                     android:text="Name"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true" />
 
                 <EditText
                     android:id="@+id/editTextName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@+id/textViewName"
+                    android:layout_marginTop="8dp"
                     android:hint="Enter your name"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="15sp" />
             </RelativeLayout>
 
             <!-- Phone Field -->
@@ -61,16 +65,19 @@
                     android:text="Phone"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@id/textViewCountry"
+                    android:layout_alignParentStart="true" />
 
                 <EditText
                     android:id="@+id/editTextPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewCountry"
+                    android:layout_marginTop="8dp"
                     android:hint="Enter your phone number"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="15sp" />
             </RelativeLayout>
 
             <!-- Country Field -->
@@ -85,25 +92,31 @@
                     android:text="Country"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:id="@+id/textViewCountry"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/textViewSelectedCountry"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewCountry"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="8dp"
                     android:text="Select Country"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="15sp" />
 
                 <Button
                     android:id="@+id/buttonSelectCountry"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select Country"
+                    android:layout_below="@id/textViewSelectedCountry"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/silver"
+                    android:text="Select Country" />
             </RelativeLayout>
 
             <!-- Languages Field -->
@@ -116,27 +129,34 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Languages"
+                    android:id="@id/textViewLanguages"
                     android:textColor="@color/black"
                     android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_alignParentStart="true" />
 
                 <TextView
                     android:id="@+id/textViewSelectedLanguages"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/textViewLanguages"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="-2dp"
+                    android:layout_marginTop="8dp"
                     android:text="Select Languages"
                     android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:layout_marginTop="8dp" />
+                    android:textSize="15sp" />
 
                 <Button
                     android:id="@+id/buttonSelectLanguages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select Languages"
+                    android:layout_below="@id/textViewSelectedLanguages"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/silver"
+                    android:text="Select Languages" />
             </RelativeLayout>
 
             <!-- Save Button -->
@@ -144,10 +164,10 @@
                 android:id="@+id/buttonSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
                 android:layout_marginTop="20dp"
-                android:text="Save"
+                android:layout_gravity="end"
                 android:backgroundTint="@color/silver"
+                android:text="Save"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>

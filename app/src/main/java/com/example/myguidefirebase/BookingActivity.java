@@ -3,11 +3,13 @@ package com.example.myguidefirebase;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +32,13 @@ public class BookingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         datePickerStart = findViewById(R.id.datePickerStart);
         datePickerEnd = findViewById(R.id.datePickerEnd);
         textViewTotalCost = findViewById(R.id.textViewTotalCost);
@@ -182,5 +190,13 @@ public class BookingActivity extends AppCompatActivity {
                 .set(availability)
                 .addOnSuccessListener(aVoid -> Toast.makeText(BookingActivity.this, "Availability saved successfully.", Toast.LENGTH_SHORT).show())
                 .addOnFailureListener(e -> Toast.makeText(BookingActivity.this, "Failed to save availability: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Close the activity and go back to the previous one
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

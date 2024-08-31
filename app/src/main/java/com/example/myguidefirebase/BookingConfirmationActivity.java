@@ -1,11 +1,13 @@
 package com.example.myguidefirebase;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,7 +27,13 @@ public class BookingConfirmationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_confirmation);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         db = FirebaseFirestore.getInstance();
 
         textViewGuideName = findViewById(R.id.textViewGuideName);
@@ -127,4 +135,14 @@ public class BookingConfirmationActivity extends AppCompatActivity {
                     Toast.makeText(BookingConfirmationActivity.this, "Failed to add notification: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Close the activity and go back to the previous one
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

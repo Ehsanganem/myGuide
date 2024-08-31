@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
@@ -44,7 +45,7 @@ import java.util.Map;
 public class ProfileActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
-
+    private Toolbar toolbar;
     private EditText editTextName, editTextAbout, editTextEmail, editTextPhone, editTextPricePerDay;
     private TextView textViewLocation, textViewLanguages;
     private Button buttonSelectCountry, buttonEditServices, buttonEditSave, buttonEditLanguages;
@@ -63,7 +64,8 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
+        toolbar=findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // Initialize UI elements
         editTextName = findViewById(R.id.editTextName);
         editTextAbout = findViewById(R.id.editTextAbout);
@@ -262,15 +264,24 @@ public class ProfileActivity extends AppCompatActivity {
         String[] servicesArray = {"Hiking Trips", "Museums", "Nightlife", "City Tours", "Food and Drink Tours",
                 "Adventure Sports", "Historical Sites", "Art Galleries", "Shopping Tours", "Cultural Experiences"};
 
-        boolean[] checkedServices = new boolean[servicesArray.length];
+        // Get current selections
         List<String> selectedServices = getSelectedServices();
+        boolean[] checkedServices = new boolean[servicesArray.length];
+
+        for (int i = 0; i < servicesArray.length; i++) {
+            if (selectedServices.contains(servicesArray[i])) {
+                checkedServices[i] = true;
+            }
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Services");
 
         builder.setMultiChoiceItems(servicesArray, checkedServices, (dialog, which, isChecked) -> {
             if (isChecked) {
-                selectedServices.add(servicesArray[which]);
+                if (!selectedServices.contains(servicesArray[which])) {
+                    selectedServices.add(servicesArray[which]);
+                }
             } else {
                 selectedServices.remove(servicesArray[which]);
             }
@@ -292,20 +303,30 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+
     private void openEditLanguagesDialog() {
         String[] languagesArray = {"English", "Hebrew", "Spanish", "French", "German", "Arabic",
                 "Hindi", "Russian", "Hungarian", "Nigerian", "Ukrainian",
                 "Japanese", "Korean", "Portuguese"};
 
-        boolean[] checkedLanguages = new boolean[languagesArray.length];
+        // Get current selections
         List<String> selectedLanguages = new ArrayList<>(Arrays.asList(textViewLanguages.getText().toString().split(",\\s*")));
+        boolean[] checkedLanguages = new boolean[languagesArray.length];
+
+        for (int i = 0; i < languagesArray.length; i++) {
+            if (selectedLanguages.contains(languagesArray[i])) {
+                checkedLanguages[i] = true;
+            }
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Select Languages");
 
         builder.setMultiChoiceItems(languagesArray, checkedLanguages, (dialog, which, isChecked) -> {
             if (isChecked) {
-                selectedLanguages.add(languagesArray[which]);
+                if (!selectedLanguages.contains(languagesArray[which])) {
+                    selectedLanguages.add(languagesArray[which]);
+                }
             } else {
                 selectedLanguages.remove(languagesArray[which]);
             }
@@ -316,6 +337,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         builder.create().show();
     }
+
 
     private void showCountryPicker() {
         CountryPicker picker = new CountryPicker.Builder().with(this)
@@ -409,4 +431,38 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadImage(String imageUrl) {
         Glide.with(this).load(imageUrl).into(imageViewProfile);
     }
+    @Override
+    public boolean onCreateOptionsMenu(android.view.Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_profile, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_home) {
+            // Navigate to the homepage (MainActivity)
+            Intent homeIntent = new Intent(ProfileActivity.this, MainActivity.class);
+            startActivity(homeIntent);
+            return true;
+        } else if (itemId == R.id.action_booking_management) {
+            // Navigate to the booking management activity
+            Intent bookingIntent = new Intent(ProfileActivity.this, BookingManagementActivity.class);
+            startActivity(bookingIntent);
+            return true;
+        } else if (itemId == R.id.action_logout) {
+            // Handle logout
+            FirebaseAuth.getInstance().signOut();
+            Intent logoutIntent = new Intent(ProfileActivity.this, LoginActivity.class);
+            logoutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(logoutIntent);
+            finish(); // Close the ProfileActivity
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }

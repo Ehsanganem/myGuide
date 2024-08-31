@@ -10,10 +10,11 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:background="@color/silver"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         android:title="Profile"
         android:titleTextColor="@android:color/white" />
+
 
     <!-- Scrollable content -->
     <ScrollView
@@ -45,7 +46,6 @@
                         android:layout_width="150dp"
                         android:layout_height="150dp"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginStart="106dp"
                         android:layout_marginTop="20dp"
                         android:src="@drawable/emptypic" />
 
@@ -53,12 +53,11 @@
                         android:id="@+id/imageViewEditProfilePicture"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_alignTop="@id/imageViewProfile"
+                        android:layout_below="@id/imageViewProfile"
                         android:layout_alignEnd="@id/imageViewProfile"
                         android:layout_marginStart="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="-40dp"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="-151dp"
+                        android:layout_marginEnd="-36dp"
                         android:clickable="true"
                         android:focusable="true"
                         android:src="@drawable/edit" />
@@ -69,8 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/imageViewProfile"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginStart="105dp"
-                        android:layout_marginTop="7dp"
+                        android:layout_marginTop="15dp"
                         android:enabled="false"
                         android:hint="Write your name"
                         android:textAlignment="center"
@@ -82,11 +80,12 @@
                         android:id="@+id/imageViewCertifiedLogo"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="26dp"
+                        android:layout_marginTop="15dp"
                         android:src="@drawable/certified"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -98,8 +97,8 @@
                 app:cardCornerRadius="10dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="397dp"
+                    android:layout_height="407dp"
                     android:orientation="vertical"
                     android:padding="15dp">
 
@@ -122,7 +121,7 @@
                         <EditText
                             android:id="@+id/editTextAbout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="93dp"
                             android:enabled="false"
                             android:hint="Who am I?"
                             android:textColor="@color/black"
@@ -148,9 +147,8 @@
 
                         <EditText
                             android:id="@+id/editTextEmail"
-                            android:layout_width="231dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
                             android:enabled="false"
                             android:hint="Write your email"
                             android:textColor="@color/black"
@@ -176,9 +174,8 @@
 
                         <EditText
                             android:id="@+id/editTextPhone"
-                            android:layout_width="231dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
+                            android:layout_width="match_parent"
+                            android:layout_height="61dp"
                             android:enabled="false"
                             android:hint="Enter your phone number"
                             android:textColor="@color/black"
@@ -187,8 +184,8 @@
 
                     <!-- Location Section -->
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="345dp"
+                        android:layout_height="81dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp">
@@ -216,16 +213,16 @@
                             android:id="@+id/buttonSelectCountry"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Select Country"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="8dp" />
+                            android:layout_marginTop="8dp"
+                            android:text="Select Country" />
                     </RelativeLayout>
 
                     <!-- Languages Section -->
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="347dp"
+                        android:layout_height="96dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp">
@@ -252,10 +249,12 @@
                             android:id="@+id/buttonEditLanguages"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Edit Languages"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="10dp" />
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="0dp"
+                            android:layout_marginRight="0dp"
+                            android:text="Edit Languages" />
                     </RelativeLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -266,8 +265,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:cardCornerRadius="10dp"
-                android:visibility="gone"> <!-- Initially hidden -->
+                android:visibility="gone"
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -275,65 +274,68 @@
                     android:orientation="vertical"
                     android:padding="15dp">
 
+                    <!-- Services Section -->
                     <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_width="349dp"
+                        android:layout_height="113dp"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
                             android:text="Services"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:layout_alignParentStart="true" />
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:id="@+id/checkboxGroupServices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
+                            android:layout_alignParentEnd="true"
                             android:layout_toStartOf="@id/buttonEditServices"
-                            android:layout_alignParentEnd="true" />
+                            android:orientation="vertical" />
 
                         <!-- The button to edit services -->
                         <Button
                             android:id="@+id/buttonEditServices"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Edit Services"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:layout_marginTop="10dp" />
+                            android:layout_marginTop="30dp"
+                            android:layout_marginEnd="217dp"
+                            android:layout_marginRight="217dp"
+                            android:text="Edit Services" />
                     </RelativeLayout>
 
                     <!-- Price per Day Field -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
                         android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
                             android:text="Price per Day"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:layout_alignParentStart="true" />
+                            android:textStyle="bold" />
 
                         <EditText
                             android:id="@+id/editTextPricePerDay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/black"
+                            android:layout_alignParentEnd="true"
                             android:hint="Enter your price"
-                            android:textSize="15sp"
-                            android:layout_alignParentEnd="true" />
+                            android:textColor="@color/black"
+                            android:textSize="15sp" />
                     </RelativeLayout>
 
                 </LinearLayout>

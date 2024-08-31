@@ -3,10 +3,13 @@ package com.example.myguidefirebase;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -28,7 +31,13 @@ public class GuideDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_detail);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         imageViewProfilePic = findViewById(R.id.imageViewProfilePic);
         textViewName = findViewById(R.id.textViewName);
         textViewRole = findViewById(R.id.textViewRole);
@@ -110,5 +119,14 @@ public class GuideDetailActivity extends AppCompatActivity {
                         textViewBookedDates.setText("Failed to load bookings.");
                     }
                 });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Close the activity and go back to the previous one
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

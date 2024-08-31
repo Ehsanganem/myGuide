@@ -12,13 +12,13 @@
     <item
         android:id="@+id/action_profile"
         android:title="Profile"
-        android:icon="@drawable/profile"
+        android:icon="@drawable/usericon"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_manage_bookings"
         android:title="@string/manage_bookings"
-        android:icon="@drawable/enlist"
+        android:icon="@drawable/booking"
         app:showAsAction="always" />
 
     <item

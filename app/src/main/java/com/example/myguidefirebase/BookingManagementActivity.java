@@ -2,10 +2,12 @@ package com.example.myguidefirebase;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +34,13 @@ public class BookingManagementActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_management);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
         recyclerViewBookings = findViewById(R.id.recyclerViewBookings);
         recyclerViewBookings.setLayoutManager(new LinearLayoutManager(this));
 
@@ -45,7 +53,14 @@ public class BookingManagementActivity extends AppCompatActivity {
 
         loadBookings();
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // Close the activity and go back to the previous one
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
     private void loadBookings() {
         db.collection("bookings")
                 .whereEqualTo("guideId", currentUserId)
