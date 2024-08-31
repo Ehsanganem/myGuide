@@ -104,6 +104,7 @@ public class ProfileActivity extends AppCompatActivity {
         buttonEditLanguages.setOnClickListener(v -> openEditLanguagesDialog());
         buttonSelectCountry.setOnClickListener(v -> showCountryPicker());
         imageViewEditProfilePicture.setOnClickListener(v -> showProfilePictureOptions());
+        enableEditing(false);
     }
 
     private void loadUserProfile() {
@@ -176,6 +177,9 @@ public class ProfileActivity extends AppCompatActivity {
         editTextAbout.setEnabled(enabled);
         editTextPhone.setEnabled(enabled);
         buttonSelectCountry.setEnabled(enabled);
+        buttonEditServices.setEnabled(enabled);
+        buttonEditLanguages.setEnabled(enabled);
+
         if (userRole != null && (userRole.equals("certified_guide") || userRole.equals("uncertified_guide"))) {
             buttonEditServices.setEnabled(enabled);
             buttonEditLanguages.setEnabled(enabled);
@@ -188,7 +192,7 @@ public class ProfileActivity extends AppCompatActivity {
         userProfileUpdates.put("bio", editTextAbout.getText().toString());
         userProfileUpdates.put("phoneNumber", editTextPhone.getText().toString());
 
-        // Save location as a Map
+    
         Map<String, String> locationMap = new HashMap<>();
         locationMap.put("country", textViewLocation.getText().toString());
         userProfileUpdates.put("location", locationMap);

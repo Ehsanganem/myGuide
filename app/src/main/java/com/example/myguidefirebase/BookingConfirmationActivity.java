@@ -3,12 +3,14 @@ package com.example.myguidefirebase;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -22,6 +24,7 @@ public class BookingConfirmationActivity extends AppCompatActivity {
     private Button buttonConfirmBooking, buttonCancelBooking;
     private Booking booking;
     private FirebaseFirestore db;
+    private ImageView imageViewGuideProfilePic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class BookingConfirmationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_booking_confirmation);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        imageViewGuideProfilePic = findViewById(R.id.imageViewGuideProfilePic);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -50,6 +54,22 @@ public class BookingConfirmationActivity extends AppCompatActivity {
             textViewGuideRole.setText("Role: " + booking.getGuideName());
             textViewBookingDates.setText("From: " + booking.getStartDate() + " To: " + booking.getEndDate());
             textViewTotalCost.setText("Total Cost: $" + booking.getTotalCost());
+            db.collection("users").document(booking.getGuideId()).get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            User guide = documentSnapshot.toObject(User.class);
+                            if (guide != null) {
+                                // Load the guide's profile picture
+                                Glide.with(this)
+                                        .load(guide.getIdPhotoUrl())
+                                        .circleCrop()
+                                        .into(imageViewGuideProfilePic);
+                            }
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(BookingConfirmationActivity.this, "Failed to load guide's data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         }
 
         buttonConfirmBooking.setOnClickListener(v -> confirmBooking());
@@ -122,7 +142,7 @@ public class BookingConfirmationActivity extends AppCompatActivity {
         notification.put("title", title);
         notification.put("message", message);
         notification.put("isRead", false);
-        notification.put("timestamp", new Date()); // Add the timestamp
+        notification.put("timestamp", new Date());
 
         db.collection("notifications")
                 .document(userId)
