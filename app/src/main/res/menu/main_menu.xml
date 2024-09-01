@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_notifications"
+        android:title="Notifications"
+        android:icon="@drawable/bell"
+        app:showAsAction="always"
+        android:actionLayout="@layout/layout_notification_badge" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        android:icon="@drawable/usericon"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_manage_bookings"
+        android:title="@string/manage_bookings"
+        android:icon="@drawable/booking"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Logout"
+        android:icon="@drawable/logout"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom" />
+</menu>

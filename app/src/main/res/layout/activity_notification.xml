@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- TextView acting as Clear Notifications button -->
+    <TextView
+        android:id="@+id/textViewClearNotifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Notifications"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#D32F2F"
+        android:layout_gravity="end"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- RecyclerView for displaying notifications -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false" />
+
+</LinearLayout>

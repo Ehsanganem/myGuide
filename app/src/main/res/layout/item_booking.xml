@@ -1,0 +1,102 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/booking_item_background"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+
+    <TextView
+        android:id="@+id/textViewTouristName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tourist"
+        android:textAppearance="@style/PrimaryTextStyle"
+        android:paddingBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/textViewGuideName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guide"
+        android:textAppearance="@style/PrimaryTextStyle"
+        android:paddingBottom="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/secondaryTextColor"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/textViewBookingId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Booking ID"
+        android:textAppearance="@style/SecondaryTextStyle"
+        android:paddingBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textAppearance="@style/StatusTextStyle"
+        android:paddingBottom="4dp"/>
+
+    <!-- Start Date TextView -->
+    <TextView
+        android:id="@+id/textViewStartDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:textAppearance="@style/PrimaryTextStyle"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"/>
+
+    <!-- End Date TextView -->
+    <TextView
+        android:id="@+id/textViewEndDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="End Date"
+        android:textAppearance="@style/PrimaryTextStyle"
+        android:paddingBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewTotalCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Cost"
+        android:textAppearance="@style/PrimaryTextStyle"
+        android:paddingTop="8dp"/>
+
+    <!-- Button Layout for Cancel and Delete -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:paddingTop="8dp">
+
+        <!-- Cancel Button -->
+        <Button
+            android:id="@+id/buttonCancelBooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:backgroundTint="@color/red"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Delete Icon -->
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewDeleteBooking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="Delete Booking"
+        android:src="@android:drawable/ic_menu_delete" />
+
+</LinearLayout>
