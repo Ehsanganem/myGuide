@@ -11,6 +11,7 @@
 
     <!-- CardView for Managing Pending Certifications -->
 
+
     <androidx.appcompat.widget.Toolbar
         android:backgroundTint="@color/silver"
         android:id="@+id/toolbar"
